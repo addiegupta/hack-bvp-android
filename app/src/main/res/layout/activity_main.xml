@@ -1,30 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_main_open_door"
+    <TextView
+        android:id="@+id/tv_main_unlock_home_label"
         android:layout_width="wrap_content"
-        android:layout_margin="64dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Open Door" />
+        android:text="@string/unlock_home_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="52dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        android:layout_marginStart="52dp" />
 
-    <Button
-        android:id="@+id/btn_main_turn_on_ac"
+    <TextView
+        android:id="@+id/tv_main_turn_on_ac_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="64dp"
-        android:layout_gravity="center_horizontal"
-        android:text="Turn On AC" />
-    <Button
-        android:id="@+id/btn_main_mood_light"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="64dp"
-        android:layout_gravity="center_horizontal"
-        android:text="Set Mood Light" />
+        android:text="@string/turn_on_ac_label"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        android:layout_marginEnd="16dp" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_main_mood_light_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/adjust_mood_light_label"
+        android:layout_marginLeft="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="40dp" />
+
+    <TextView
+        android:id="@+id/tv_main_extras_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="31dp"
+        android:layout_marginRight="63dp"
+        android:text="@string/extras"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="64dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@android:color/darker_gray"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/linearLayout2"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp" />
+
+    <ImageView
+        android:id="@+id/iv_turn_on_ac"
+        android:layout_width="120dp"
+        android:layout_height="140dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/ac"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_main_turn_on_ac_label"
+        app:layout_constraintVertical_bias="0.537"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/iv_unlock_home"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.865" />
+
+    <ImageView
+        android:id="@+id/iv_unlock_home"
+        android:layout_width="120dp"
+        android:layout_height="140dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/key"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_main_unlock_home_label"
+        app:layout_constraintVertical_bias="0.534"
+        android:layout_marginStart="31dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_mood_light"
+        android:layout_width="120dp"
+        android:layout_height="140dp"
+        app:srcCompat="@drawable/light"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_main_mood_light_label"
+        app:layout_constraintVertical_bias="0.538"
+        android:layout_marginStart="31dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_extras"
+        android:layout_width="120dp"
+        android:layout_height="140dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/plus"
+        android:layout_marginRight="28dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_main_extras_label"
+        app:layout_constraintLeft_toRightOf="@+id/iv_mood_light"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.987" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/darker_gray"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+</android.support.constraint.ConstraintLayout>

@@ -18,7 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aitorvs.android.fingerlock.FingerprintDialog;
@@ -53,19 +53,26 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     private PendingIntent mGeofencePendingIntent;
 
     private String KEY_NAME = "scan_fingerprint";
-    @BindView(R.id.btn_main_open_door)
-    Button mOpenDoorButton;
-    @BindView(R.id.btn_main_turn_on_ac)
-    Button mTurnOnAcButton;
-    @BindView(R.id.btn_main_mood_light)
-    Button mSetMoodLightButton;
     private GeofencingClient mGeofencingClient;
     private ArrayList<Geofence> mGeofenceList;
+
+    @BindView(R.id.iv_extras)
+    ImageView mExtrasImageView;
+    @BindView(R.id.iv_turn_on_ac)
+    ImageView mTurnOnAcImageView;
+    @BindView(R.id.iv_unlock_home)
+    ImageView mUnlockHomeImageView;
+    @BindView(R.id.iv_mood_light)
+    ImageView mMoodLightImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
 
         mGeofenceList = new ArrayList<>();
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
 
         mGeofencingClient = LocationServices.getGeofencingClient(this);
 
-        mOpenDoorButton.setOnClickListener(new View.OnClickListener() {
+        mUnlockHomeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new FingerprintDialog.Builder()
@@ -84,16 +91,16 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                         .show();                    // show the dialog
             }
         });
-        mTurnOnAcButton.setOnClickListener(new View.OnClickListener() {
+        mTurnOnAcImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Turning on AC", Toast.LENGTH_SHORT).show();
             }
         });
-        mSetMoodLightButton.setOnClickListener(new View.OnClickListener() {
+        mMoodLightImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,MoodLightActivity.class));
+                startActivity(new Intent(MainActivity.this, MoodLightActivity.class));
             }
         });
 
@@ -116,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                     }
                 }
                 break;
+            case R.id.menu_action_reset:
+                Toast.makeText(this, "Reset everything", Toast.LENGTH_SHORT).show();
         }
         return true;
     }
@@ -232,7 +241,11 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     @Override
     public void onFingerprintDialogAuthenticated() {
 
-            Toast.makeText(this, "Opening door", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Opening door", Toast.LENGTH_SHORT).show();
+
+        String url = "https://f30f71f1.ngrok.io/acapi/edit?status=1";
+        QueryUtils.volleyHttpRequest(this,url);
+
     }
 
     @Override

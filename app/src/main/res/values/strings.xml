@@ -2,4 +2,9 @@
     <string name="app_name">HackBVP</string>
     <string name="set_home_location">Set Home Location</string>
     <string name="geofence_transition_invalid_type">Geofence transition invalid type %s</string>
+    <string name="unlock_home_label">Unlock Home</string>
+    <string name="turn_on_ac_label">Turn On Air-Conditioner</string>
+    <string name="adjust_mood_light_label">Adjust Mood Light</string>
+    <string name="extras">Extras</string>
+    <string name="reset">Reset</string>
 </resources>

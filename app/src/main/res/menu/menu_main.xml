@@ -6,4 +6,10 @@
         android:id="@+id/menu_action_set_home_location"
         android:title="@string/set_home_location"
         app:showAsAction="never" />
+    <item
+        android:orderInCategory="2"
+        android:id="@+id/menu_action_reset"
+        android:title="@string/reset"
+        app:showAsAction="never" />
+
 </menu>
