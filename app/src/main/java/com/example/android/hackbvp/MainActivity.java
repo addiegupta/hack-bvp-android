@@ -42,7 +42,6 @@ import static android.os.Build.VERSION_CODES.M;
 public class MainActivity extends AppCompatActivity implements FingerprintDialog.Callback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int DOOR_REQUEST_CODE = 1;
-    private static final int AC_REQUEST_CODE = 2;
     private static final String PREFS_KEY = "prefs";
     private static final String LATITUDE_KEY = "latitude";
     private static final String LONGITUDE_KEY = "longitude";
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     Button mTurnOnAcButton;
     @BindView(R.id.btn_main_mood_light)
     Button mSetMoodLightButton;
-    private boolean mIsOpenDoorClick;
     private GeofencingClient mGeofencingClient;
     private ArrayList<Geofence> mGeofenceList;
 
@@ -78,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         mOpenDoorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIsOpenDoorClick = true;
                 new FingerprintDialog.Builder()
                         .with(MainActivity.this)    // context, must call
                         .setKeyName(KEY_NAME)// String key name, must call
@@ -90,13 +87,7 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         mTurnOnAcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIsOpenDoorClick = false;
-                new FingerprintDialog.Builder()
-                        .with(MainActivity.this)    // context, must call
-                        .setKeyName(KEY_NAME)       // String key name, must call
-                        .setCancelable(true)
-                        .setRequestCode(AC_REQUEST_CODE)         // request code identifier, must call
-                        .show();                    // show the dialog
+                Toast.makeText(MainActivity.this, "Turning on AC", Toast.LENGTH_SHORT).show();
             }
         });
         mSetMoodLightButton.setOnClickListener(new View.OnClickListener() {
@@ -241,12 +232,7 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     @Override
     public void onFingerprintDialogAuthenticated() {
 
-        if (mIsOpenDoorClick) {
             Toast.makeText(this, "Opening door", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Turning on AC", Toast.LENGTH_SHORT).show();
-
-        }
     }
 
     @Override
