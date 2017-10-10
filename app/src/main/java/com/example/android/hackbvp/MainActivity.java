@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     Button mOpenDoorButton;
     @BindView(R.id.btn_main_turn_on_ac)
     Button mTurnOnAcButton;
+    @BindView(R.id.btn_main_mood_light)
+    Button mSetMoodLightButton;
     private boolean mIsOpenDoorClick;
     private GeofencingClient mGeofencingClient;
     private ArrayList<Geofence> mGeofenceList;
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                 new FingerprintDialog.Builder()
                         .with(MainActivity.this)    // context, must call
                         .setKeyName(KEY_NAME)// String key name, must call
-                        .setCancelable(false)
+                        .setCancelable(true)
                         .setRequestCode(DOOR_REQUEST_CODE)         // request code identifier, must call
                         .show();                    // show the dialog
             }
@@ -92,9 +94,15 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                 new FingerprintDialog.Builder()
                         .with(MainActivity.this)    // context, must call
                         .setKeyName(KEY_NAME)       // String key name, must call
-                        .setCancelable(false)
+                        .setCancelable(true)
                         .setRequestCode(AC_REQUEST_CODE)         // request code identifier, must call
                         .show();                    // show the dialog
+            }
+        });
+        mSetMoodLightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,MoodLightActivity.class));
             }
         });
 
@@ -181,6 +189,10 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         SharedPreferences preferences = getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
         double mLatitude = Double.parseDouble(preferences.getString(LATITUDE_KEY, null));
         double mLongitude = Double.parseDouble(preferences.getString(LONGITUDE_KEY, null));
+
+        // FIXME Possible cause of errors
+        mGeofencingClient.removeGeofences(getGeofencePendingIntent());
+
         mGeofenceList.add(new Geofence.Builder()
                 // Set the request ID of the geofence. This is a string to identify this
                 // geofence.

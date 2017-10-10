@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".GeofenceTransitionsIntentService"/>
+        <service android:name=".GeofenceTransitionsIntentService" />
+
+        <activity android:name=".MoodLightActivity"></activity>
     </application>
 
 </manifest>
