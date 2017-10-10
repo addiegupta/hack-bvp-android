@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:orderInCategory="1"
+        android:id="@+id/menu_action_set_home_location"
+        android:title="@string/set_home_location"
+        app:showAsAction="never" />
+</menu>
