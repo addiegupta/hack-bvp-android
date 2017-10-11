@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 
 import static android.os.Build.VERSION_CODES.M;
 
-public class MainActivity extends AppCompatActivity implements FingerprintDialog.Callback{
+public class MainActivity extends AppCompatActivity implements FingerprintDialog.Callback {
 
     private static final int DOOR_REQUEST_CODE = 1;
     private static final String PREFS_KEY = "prefs";
@@ -83,11 +83,10 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         mGeofencingClient = LocationServices.getGeofencingClient(this);
 
         String action = getIntent().getAction();
-        if (action.equals(GeofenceTransitionsIntentService.ACTION_AC)){
+        if (action.equals(GeofenceTransitionsIntentService.ACTION_AC)) {
             Toast.makeText(MainActivity.this, "Turning on AC", Toast.LENGTH_SHORT).show();
             turnOnAC();
-        }
-        else if (action.equals(GeofenceTransitionsIntentService.ACTION_HOME)){
+        } else if (action.equals(GeofenceTransitionsIntentService.ACTION_HOME)) {
             new FingerprintDialog.Builder()
                     .with(MainActivity.this)    // context, must call
                     .setKeyName(KEY_NAME)// String key name, must call
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         mExtrasImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,ExtrasActivity.class));
+                startActivity(new Intent(MainActivity.this, ExtrasActivity.class));
             }
         });
 
@@ -188,30 +187,17 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         }
     }
 
-    private void setHomeLocation() throws SecurityException {
-
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            SharedPreferences preferences = getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
-                            preferences.edit()
-                                    .putString(LATITUDE_KEY, String.valueOf(latitude))
-                                    .putString(LONGITUDE_KEY, String.valueOf(longitude))
-                                    .apply();
-                            Toast.makeText(MainActivity.this, String.valueOf(latitude) + "  " + String.valueOf(longitude), Toast.LENGTH_LONG).show();
-                            Log.d("MainActivity", "Lat " + String.valueOf(latitude) + " Long " + String.valueOf(longitude));
-                        }
-                    }
-                });
+    private void handleLocation(Location location) throws SecurityException {
+        // Logic to handle location object
+        double mLatitude = location.getLatitude();
+        double mLongitude = location.getLongitude();
         SharedPreferences preferences = getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
-        double mLatitude = Double.parseDouble(preferences.getString(LATITUDE_KEY, null));
-        double mLongitude = Double.parseDouble(preferences.getString(LONGITUDE_KEY, null));
+        preferences.edit()
+                .putString(LATITUDE_KEY, String.valueOf(mLatitude))
+                .putString(LONGITUDE_KEY, String.valueOf(mLongitude))
+                .apply();
+        Toast.makeText(MainActivity.this, String.valueOf(mLatitude) + "  " + String.valueOf(mLongitude), Toast.LENGTH_LONG).show();
+        Log.d("MainActivity", "Lat " + String.valueOf(mLatitude) + " Long " + String.valueOf(mLongitude));
 
         mGeofencingClient.removeGeofences(getGeofencePendingIntent());
 
@@ -240,13 +226,13 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build());
 
+
         mGeofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
                 .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Geofences added
                         // ...
-                        Toast.makeText(MainActivity.this, "Geofences added", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
@@ -254,46 +240,60 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                     public void onFailure(@NonNull Exception e) {
                         // Failed to add geofences
                         // ...
-                        Toast.makeText(MainActivity.this, "Failed to add Geofences", Toast.LENGTH_SHORT).show();
                     }
                 });
 
+
+    }
+
+
+    private void setHomeLocation() throws SecurityException {
+
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            handleLocation(location);
+                        }
+                    }
+                });
     }
 
     @Override
     public void onFingerprintDialogAuthenticated() {
 
         Toast.makeText(this, "Opening door", Toast.LENGTH_SHORT).show();
-       unlockDoor();
+        unlockDoor();
     }
 
-    private void unlockDoor(){
+    private void unlockDoor() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        queue = QueryUtils.addVolleyHttpRequest(queue,false,CHANGE_URL);
+        queue = QueryUtils.addVolleyHttpRequest(queue, false, CHANGE_URL);
         String url = BASE_URL + "doorapi/edit?status=1";
-        queue = QueryUtils.addVolleyHttpRequest(queue,false,url);
+        queue = QueryUtils.addVolleyHttpRequest(queue, false, url);
 
     }
-    private void turnOnAC(){
+
+    private void turnOnAC() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        queue = QueryUtils.addVolleyHttpRequest(queue,false,CHANGE_URL);
+        queue = QueryUtils.addVolleyHttpRequest(queue, false, CHANGE_URL);
         String url = BASE_URL + "acapi/edit?status=1";
-        queue = QueryUtils.addVolleyHttpRequest(queue,false,url);
+        queue = QueryUtils.addVolleyHttpRequest(queue, false, url);
 
     }
+
     @Override
     public void onFingerprintDialogVerifyPassword(FingerprintDialog fingerprintDialog, String s) {
-        Toast.makeText(this, "onFPDverifyPassword", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFingerprintDialogStageUpdated(FingerprintDialog fingerprintDialog, FingerprintDialog.Stage stage) {
-        Toast.makeText(this, "onFPDSUpdated", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFingerprintDialogCancelled() {
-        Toast.makeText(this, "onFpDCanceled", Toast.LENGTH_SHORT).show();
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -318,18 +318,18 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         return mGeofencePendingIntent;
     }
 
-    private void resetEverything(){
+    private void resetEverything() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        queue = QueryUtils.addVolleyHttpRequest(queue,false,CHANGE_URL);
+        queue = QueryUtils.addVolleyHttpRequest(queue, false, CHANGE_URL);
 
         String resetUrl1 = BASE_URL + "lightapi/reset";
-        queue = QueryUtils.addVolleyHttpRequest(queue,true,resetUrl1);
+        queue = QueryUtils.addVolleyHttpRequest(queue, true, resetUrl1);
 
         String resetUrl2 = BASE_URL + "doorapi/edit?status=0";
-        queue = QueryUtils.addVolleyHttpRequest(queue,false,resetUrl2);
+        queue = QueryUtils.addVolleyHttpRequest(queue, false, resetUrl2);
 
         String resetUrl3 = BASE_URL + "acapi/edit?status=0";
-        queue = QueryUtils.addVolleyHttpRequest(queue,false,resetUrl3);
+        queue = QueryUtils.addVolleyHttpRequest(queue, false, resetUrl3);
         Toast.makeText(this, "All devices reset!", Toast.LENGTH_SHORT).show();
     }
 
