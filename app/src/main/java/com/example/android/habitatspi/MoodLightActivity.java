@@ -1,4 +1,4 @@
-package com.example.android.hackbvp;
+package com.example.android.habitatspi;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;

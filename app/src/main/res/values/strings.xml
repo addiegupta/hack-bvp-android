@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HackBVP</string>
+    <string name="app_name">Habitats Pi</string>
     <string name="set_home_location">Set Home Location</string>
     <string name="geofence_transition_invalid_type">Geofence transition invalid type %s</string>
     <string name="unlock_home_label">Unlock Home</string>

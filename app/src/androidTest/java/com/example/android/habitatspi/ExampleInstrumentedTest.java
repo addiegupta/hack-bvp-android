@@ -1,4 +1,4 @@
-package com.example.android.hackbvp;
+package com.example.android.habitatspi;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

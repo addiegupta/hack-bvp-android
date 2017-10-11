@@ -1,4 +1,4 @@
-package com.example.android.hackbvp;
+package com.example.android.habitatspi;
 
 import android.app.IntentService;
 import android.app.NotificationManager;

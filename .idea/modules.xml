@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HackBVP.iml" filepath="$PROJECT_DIR$/HackBVP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HabitatsPi.iml" filepath="$PROJECT_DIR$/HabitatsPi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

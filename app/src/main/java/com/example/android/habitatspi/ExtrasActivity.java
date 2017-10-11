@@ -1,4 +1,4 @@
-package com.example.android.hackbvp;
+package com.example.android.habitatspi;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
