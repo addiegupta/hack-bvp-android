@@ -33,7 +33,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
     private NotificationManager mNotificationManager;
     public static final int NOTIFICATION_ID = 1;
     private static final String TEN_METRE_GEOFENCE_KEY = "10m";
-    private static final String FIVE_KM_GEOFENCE_KEY = "5km";
     public static final String ACTION_AC = "turn_on_ac";
     public static final String ACTION_HOME = "unlock_home";
 
@@ -41,9 +40,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
-//            String errorMessage = GeofenceErrorMessages.getErrorString(this,
-//                    geofencingEvent.getErrorCode());
-//            Log.e(TAG, errorMessage);
             return;
         }
 
@@ -75,13 +71,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 }
 
             }
-
-            // Get the transition details as a String.
-//            String geofenceTransitionDetails = getGeofenceTransitionDetails(
-//                    this,
-//                    geofenceTransition,
-//                    triggeringGeofences
-//            );
 
         } else {
             // Log the error.

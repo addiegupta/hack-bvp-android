@@ -149,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                 }
                 break;
             case R.id.menu_action_reset:
-                Toast.makeText(this, "Reset everything", Toast.LENGTH_SHORT).show();
                 resetEverything();
         }
         return true;
@@ -184,8 +183,6 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                 } else {
 
                     Toast.makeText(this, "Location is needed for the app to function", Toast.LENGTH_SHORT).show();
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
             }
         }
@@ -216,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         double mLatitude = Double.parseDouble(preferences.getString(LATITUDE_KEY, null));
         double mLongitude = Double.parseDouble(preferences.getString(LONGITUDE_KEY, null));
 
-        // FIXME Possible cause of errors
         mGeofencingClient.removeGeofences(getGeofencePendingIntent());
 
         mGeofenceList.add(new Geofence.Builder()
@@ -268,8 +264,6 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     public void onFingerprintDialogAuthenticated() {
 
         Toast.makeText(this, "Opening door", Toast.LENGTH_SHORT).show();
-
-//        String url = "https://f30f71f1.ngrok.io/acapi/edit?status=1";
        unlockDoor();
     }
 
