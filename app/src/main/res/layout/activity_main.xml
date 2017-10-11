@@ -9,45 +9,61 @@
         android:id="@+id/tv_main_unlock_home_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="@string/unlock_home_label"
+        android:textSize="17sp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/iv_unlock_home"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="52dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        android:layout_marginStart="52dp" />
+        app:layout_constraintHorizontal_bias="0.676"
+        android:layout_marginBottom="21dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2" />
 
     <TextView
         android:id="@+id/tv_main_turn_on_ac_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/turn_on_ac_label"
+        android:layout_marginBottom="13dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="16dp"
+        android:text="@string/turn_on_ac_label"
+        android:textAlignment="center"
+        android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        android:layout_marginEnd="16dp" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/iv_turn_on_ac"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/tv_main_mood_light_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="31dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="40dp"
         android:text="@string/adjust_mood_light_label"
-        android:layout_marginLeft="40dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="40dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/iv_mood_light" />
 
     <TextView
         android:id="@+id/tv_main_extras_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="31dp"
+        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="63dp"
         android:text="@string/extras"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="64dp" />
+        app:layout_constraintHorizontal_bias="0.966"
+        app:layout_constraintLeft_toLeftOf="@+id/iv_extras"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <LinearLayout
         android:layout_width="0dp"

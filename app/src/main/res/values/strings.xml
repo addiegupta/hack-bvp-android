@@ -3,8 +3,11 @@
     <string name="set_home_location">Set Home Location</string>
     <string name="geofence_transition_invalid_type">Geofence transition invalid type %s</string>
     <string name="unlock_home_label">Unlock Home</string>
-    <string name="turn_on_ac_label">Turn On Air-Conditioner</string>
+    <string name="turn_on_ac_label">Turn On \nAir-Conditioner</string>
     <string name="adjust_mood_light_label">Adjust Mood Light</string>
     <string name="extras">Extras</string>
     <string name="reset">Reset</string>
+    <string name="adjust">Adjust</string>
+    <string name="api_base_url">https://4790004f.ngrok.io/</string>
+    <string name="extras_description">This page will contain controls for some more features that have been thought of but not yet implemented. \n\nFor example, A notification will be sent on the app whenever a car is parked in your parking space (using a parking sensor setup)</string>
 </resources>

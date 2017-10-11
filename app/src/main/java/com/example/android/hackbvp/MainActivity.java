@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +21,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aitorvs.android.fingerlock.FingerprintDialog;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
@@ -39,7 +38,7 @@ import butterknife.ButterKnife;
 
 import static android.os.Build.VERSION_CODES.M;
 
-public class MainActivity extends AppCompatActivity implements FingerprintDialog.Callback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements FingerprintDialog.Callback{
 
     private static final int DOOR_REQUEST_CODE = 1;
     private static final String PREFS_KEY = "prefs";
@@ -48,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     private static final String TEN_METRE_GEOFENCE_KEY = "10m";
     private static final String FIVE_KM_GEOFENCE_KEY = "5km";
     private static final int PERMISSION_REQUEST_KEY = 123;
+    private static String BASE_URL;
+    private static String CHANGE_URL;
 
     private FusedLocationProviderClient mFusedLocationClient;
     private PendingIntent mGeofencePendingIntent;
@@ -69,16 +70,32 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        BASE_URL = getString(R.string.api_base_url);
+        CHANGE_URL = BASE_URL + "changemeapi/currentbool?status=true";
 
         mGeofenceList = new ArrayList<>();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mGeofencingClient = LocationServices.getGeofencingClient(this);
+
+        String action = getIntent().getAction();
+        if (action.equals(GeofenceTransitionsIntentService.ACTION_AC)){
+            Toast.makeText(MainActivity.this, "Turning on AC", Toast.LENGTH_SHORT).show();
+            turnOnAC();
+        }
+        else if (action.equals(GeofenceTransitionsIntentService.ACTION_HOME)){
+            new FingerprintDialog.Builder()
+                    .with(MainActivity.this)    // context, must call
+                    .setKeyName(KEY_NAME)// String key name, must call
+                    .setCancelable(true)
+                    .setRequestCode(DOOR_REQUEST_CODE)         // request code identifier, must call
+                    .show();                    // show the dialog
+
+        }
 
         mUnlockHomeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +112,20 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Turning on AC", Toast.LENGTH_SHORT).show();
+                //TODO Request 2
+                turnOnAC();
             }
         });
         mMoodLightImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, MoodLightActivity.class));
+            }
+        });
+        mExtrasImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ExtrasActivity.class));
             }
         });
 
@@ -125,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                 break;
             case R.id.menu_action_reset:
                 Toast.makeText(this, "Reset everything", Toast.LENGTH_SHORT).show();
+                resetEverything();
         }
         return true;
     }
@@ -200,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
                 .setCircularRegion(
                         mLatitude,
                         mLongitude,
-                        10)
+                        25)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
@@ -243,11 +269,24 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
 
         Toast.makeText(this, "Opening door", Toast.LENGTH_SHORT).show();
 
-        String url = "https://f30f71f1.ngrok.io/acapi/edit?status=1";
-        QueryUtils.volleyHttpRequest(this,url);
-
+//        String url = "https://f30f71f1.ngrok.io/acapi/edit?status=1";
+       unlockDoor();
     }
 
+    private void unlockDoor(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue = QueryUtils.addVolleyHttpRequest(queue,false,CHANGE_URL);
+        String url = BASE_URL + "doorapi/edit?status=1";
+        queue = QueryUtils.addVolleyHttpRequest(queue,false,url);
+
+    }
+    private void turnOnAC(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue = QueryUtils.addVolleyHttpRequest(queue,false,CHANGE_URL);
+        String url = BASE_URL + "acapi/edit?status=1";
+        queue = QueryUtils.addVolleyHttpRequest(queue,false,url);
+
+    }
     @Override
     public void onFingerprintDialogVerifyPassword(FingerprintDialog fingerprintDialog, String s) {
         Toast.makeText(this, "onFPDverifyPassword", Toast.LENGTH_SHORT).show();
@@ -261,21 +300,6 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
     @Override
     public void onFingerprintDialogCancelled() {
         Toast.makeText(this, "onFpDCanceled", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -298,6 +322,21 @@ public class MainActivity extends AppCompatActivity implements FingerprintDialog
         mGeofencePendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
         return mGeofencePendingIntent;
+    }
+
+    private void resetEverything(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue = QueryUtils.addVolleyHttpRequest(queue,false,CHANGE_URL);
+
+        String resetUrl1 = BASE_URL + "lightapi/reset";
+        queue = QueryUtils.addVolleyHttpRequest(queue,true,resetUrl1);
+
+        String resetUrl2 = BASE_URL + "doorapi/edit?status=0";
+        queue = QueryUtils.addVolleyHttpRequest(queue,false,resetUrl2);
+
+        String resetUrl3 = BASE_URL + "acapi/edit?status=0";
+        queue = QueryUtils.addVolleyHttpRequest(queue,false,resetUrl3);
+        Toast.makeText(this, "All devices reset!", Toast.LENGTH_SHORT).show();
     }
 
 

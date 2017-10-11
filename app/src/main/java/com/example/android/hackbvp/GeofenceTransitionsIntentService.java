@@ -23,7 +23,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
     public GeofenceTransitionsIntentService(String name) {
         super(name);
     }
-    public GeofenceTransitionsIntentService(){
+
+    public GeofenceTransitionsIntentService() {
         super("empty constructor");
     }
 
@@ -31,6 +32,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     private NotificationManager mNotificationManager;
     public static final int NOTIFICATION_ID = 1;
+    private static final String TEN_METRE_GEOFENCE_KEY = "10m";
+    private static final String FIVE_KM_GEOFENCE_KEY = "5km";
+    public static final String ACTION_AC = "turn_on_ac";
+    public static final String ACTION_HOME = "unlock_home";
 
 
     protected void onHandleIntent(Intent intent) {
@@ -44,16 +49,32 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
+        Log.d("GeofencingService","Received geofencing event");
 
+        //TODO Request 3
+        //TODO Remove exit code
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
 
             // Get the geofences that were triggered. A single event can trigger
             // multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            boolean acTurnedOn = false;
+            for (Geofence geofence : triggeringGeofences) {
+                if (!acTurnedOn) {
+                    acTurnedOn = true;
+                    sendNotificationForAc();
+                }
 
-            String requestId = triggeringGeofences.get(0).getRequestId();
+                String requestId = geofence.getRequestId();
+                Log.d("dfs",requestId);
+                if (requestId.equals(TEN_METRE_GEOFENCE_KEY)) {
+                    // Send notification and log the transition details.
+                    sendNotificationForHome();
+                    break;
+                }
+
+            }
 
             // Get the transition details as a String.
 //            String geofenceTransitionDetails = getGeofenceTransitionDetails(
@@ -62,8 +83,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
 //                    triggeringGeofences
 //            );
 
-            // Send notification and log the transition details.
-            sendNotification(requestId);
         } else {
             // Log the error.
             Log.e(TAG, "Geofence transition invalid type " +
@@ -71,22 +90,46 @@ public class GeofenceTransitionsIntentService extends IntentService {
         }
     }
 
-    private void sendNotification(String requestId){
+    private void sendNotificationForAc(){
+        Intent turnOnAcIntent = new Intent
+                (this,MainActivity.class)
+                .setAction(ACTION_AC);
 
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                turnOnAcIntent, 0);
+
+        String message = "Want to turn on your AC?";
+        String action = "Turn on AC";
+        sendNotification(contentIntent,message,action,2);
+    }
+    private void sendNotificationForHome(){
+       Intent homeUnlockIntent = new Intent
+               (this,MainActivity.class)
+               .setAction(ACTION_HOME);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                homeUnlockIntent, 0);
+
+        String message = "Want to unlock your home?";
+        String action = "Unlock Home";
+        sendNotification(contentIntent,message,action,1);
+    }
+    private void sendNotification(PendingIntent contentIntent,String message,String action,int notifId) {
+
+        Log.d("DDS","Sending notification " + message);
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
-
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setContentTitle("Geofence Triggered")
+                        .setContentTitle("Home is nearby")
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(requestId))
-                        .setContentText("BVP")
-                .setSmallIcon(R.mipmap.ic_launcher_round);
+                                .bigText(message))
+                        .setContentText(message)
+                        .addAction(new NotificationCompat.Action(R.mipmap.ic_launcher_round,action,contentIntent))
+                        .setSmallIcon(R.mipmap.ic_launcher_round);
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(notifId, mBuilder.build());
     }
 }
