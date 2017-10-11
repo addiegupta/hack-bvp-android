@@ -84,7 +84,6 @@ public class MoodLightActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue = QueryUtils.addVolleyHttpRequest(queue,false,CHANGE_URL);
         String url = BASE_URL + "lightapi/change?red=" + redValue +"&blue=" + blueValue + "&green="+greenValue+"&status="+state;
-        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
         queue = QueryUtils.addVolleyHttpRequest(queue,false,url);
 
 
